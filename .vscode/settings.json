@@ -1,4 +1,5 @@
 {
     "jest.pathToJest": "npm run test:unit --",
-    "jest.rootPath":"app"
+    "jest.rootPath":"app",
+    "editor.formatOnSave": true,
 }
