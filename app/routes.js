@@ -1,8 +1,9 @@
 const express = require('express');
-const DefaultController = require('./controllers/auth/default.controller')
+const GameController = require('./controllers/game/game.controller');
 
 const router = express.Router();
 
-router.get('/helloworld', DefaultController.getHelloWorld);
+router.get('/game/start', GameController.startNewGame);
+router.get('/game/stop', GameController.stopCurrenGame);
 
 module.exports = router;

@@ -23,13 +23,11 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(
 	bodyParser.urlencoded({
 		extended: true,
-	})
+	}),
 );
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
-	console.log(
-		'received : ' + req.method + ' ' + req.originalUrl + ' (Authorization: ' + req.get('Authorization') + ')'
-	);
+	console.log('received : ' + req.method + ' ' + req.originalUrl);
 	next();
 });
 app.use('/', routes);

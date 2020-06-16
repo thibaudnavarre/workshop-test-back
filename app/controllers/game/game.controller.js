@@ -9,6 +9,11 @@ const GameController = {
 		}
 		res.send();
 	},
+
+	stopCurrenGame(req, res) {
+		GameOrchestratorService.gameStop();
+		res.send();
+	},
 };
 
 module.exports = GameController;

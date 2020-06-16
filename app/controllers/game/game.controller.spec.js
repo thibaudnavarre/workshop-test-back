@@ -37,4 +37,15 @@ describe('game.controller', () => {
 			expect(res.send).toBeCalled();
 		});
 	});
+	describe('startNewGame', () => {
+		it('should call the service to start a new game', () => {
+			GameController.stopCurrenGame(req, res);
+			expect(GameOrchestratorService.gameStop).toBeCalled();
+		});
+
+		it('should send an empty response', () => {
+			GameController.stopCurrenGame(req, res);
+			expect(res.send).toBeCalled();
+		});
+	});
 });
