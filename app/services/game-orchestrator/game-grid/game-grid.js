@@ -3,17 +3,17 @@ class GameGrid {
 	static NB_COL = 4;
 
 	constructor() {
-		this.grid = [];
-		for (var i = 0; i < GameGrid.NB_COL * GameGrid.NB_ROW; i++) this.grid.push(i);
+		this.cellsAvailable = [];
+		for (var i = 0; i < GameGrid.NB_COL * GameGrid.NB_ROW; i++) this.cellsAvailable.push(i);
 	}
 
 	isCellAvailable(row, col) {
-		return this.grid.indexOf(this.getCellValue(row, col)) > -1;
+		return this.cellsAvailable.indexOf(this.getCellValue(row, col)) > -1;
 	}
 
 	fillCell(row, col) {
-		const v = this.getCellValue(row, col);
-		this.grid.splice(this.grid.indexOf(v), 1);
+		const value = this.getCellValue(row, col);
+		this.cellsAvailable.splice(this.cellsAvailable.indexOf(value), 1);
 	}
 
 	getCellValue(row, col) {
@@ -28,13 +28,13 @@ class GameGrid {
 
 	releaseCell(row, col) {
 		if (this.isCellAvailable(row, col)) throw Error('cell already available');
-		this.grid.push(this.getCellValue(row, col));
+		this.cellsAvailable.push(this.getCellValue(row, col));
 	}
 
 	getRandomAvailableCell() {
-		if (this.grid.length === 0) throw Error('no cell available');
+		if (this.cellsAvailable.length === 0) throw Error('no cell available');
 		const random = Math.random() * 100;
-		const availableCellValue = this.grid[random % this.grid.length];
+		const availableCellValue = this.cellsAvailable[random % this.cellsAvailable.length];
 		return this.getCellCoordinate(availableCellValue);
 	}
 }

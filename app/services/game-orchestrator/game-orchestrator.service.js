@@ -17,19 +17,19 @@ const GameOrchestratorService = {
 		gameGrid = new GameGrid();
 		moles = [];
 		gameTicks = 0;
-		currentTimer = this.moleGenerationStart();
+		currentTimer = this.moleGenerationLoop();
 	},
 
-	moleGenerationStart() {
+	moleGenerationLoop() {
 		return setTimeout(() => {
-			const nmole = gameGrid.getRandomAvailableCell();
-			gameGrid.fillCell(nmole.row, nmole.col);
-			moles.push({ position: nmole, tickGeneration: gameTicks++ });
+			const newMole = gameGrid.getRandomAvailableCell();
+			gameGrid.fillCell(newMole.row, newMole.col);
+			moles.push({ position: newMole, tickGeneration: gameTicks++ });
 			if (moles[0].tickGeneration < gameTicks - this.NB_TICK_MOLE_DELETION) {
 				gameGrid.releaseCell(moles[0].position.row, moles[0].position.col);
 				moles = moles.splice(1, moles.length);
 			}
-			if (gameTicks < 10) currentTimer = this.moleGenerationStart();
+			if (gameTicks < this.NB_TICK_MOLE_DELETION) currentTimer = this.moleGenerationLoop();
 			else this.gameStop();
 		}, this.TICK_TIME);
 	},
