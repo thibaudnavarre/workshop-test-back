@@ -1,5 +1,4 @@
 const { GameGrid } = require('./game-grid');
-const gameGrid = require('./game-grid');
 
 describe('game grid', () => {
 	let grid;
@@ -17,13 +16,13 @@ describe('game grid', () => {
 		it('should throw an error when the row to check does not exist', () => {
 			expect(() => {
 				grid.isCellAvailable(10, 0);
-			}).toThrowError();
+			}).toThrow();
 		});
 
 		it('should throw an error when the col to check does not exist', () => {
 			expect(() => {
 				grid.isCellAvailable(0, 10);
-			}).toThrowError();
+			}).toThrow();
 		});
 
 		describe('cell availability', () => {
@@ -36,13 +35,13 @@ describe('game grid', () => {
 			it('should throw an error when the row to fill does not exist', () => {
 				expect(() => {
 					grid.fillCell(10, 0);
-				}).toThrowError();
+				}).toThrow();
 			});
 
 			it('should throw an error when the col to fill does not exist', () => {
 				expect(() => {
 					grid.fillCell(0, 10);
-				}).toThrowError();
+				}).toThrow();
 			});
 		});
 	});
@@ -58,7 +57,7 @@ describe('game grid', () => {
 		it('should throw an error when trying to release an available cell', () => {
 			expect(() => {
 				grid.releaseCell(0, 0);
-			}).toThrowError();
+			}).toThrow();
 		});
 	});
 
@@ -83,8 +82,13 @@ describe('game grid', () => {
 		});
 
 		it('should throw an error when there is no cell available', () => {
-			for (var col = 0; col < GameGrid.NB_COL; col++)
-				for (var row = 0; row < GameGrid.NB_ROW; row++) grid.fillCell(row, col);
+			let col = 0;
+			let row = 0;
+			for (; col < GameGrid.NB_COL; col += 1) {
+				for (row = 0; row < GameGrid.NB_ROW; row += 1) {
+					grid.fillCell(row, col);
+				}
+			}
 			expect(() => {
 				grid.getRandomAvailableCell();
 			}).toThrow();

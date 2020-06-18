@@ -24,7 +24,8 @@ const GameOrchestratorService = {
 		return setTimeout(() => {
 			const newMole = gameGrid.getRandomAvailableCell();
 			gameGrid.fillCell(newMole.row, newMole.col);
-			moles.push({ position: newMole, tickGeneration: gameTicks++ });
+			moles.push({ position: newMole, tickGeneration: gameTicks });
+			gameTicks += 1;
 			if (moles[0].tickGeneration < gameTicks - this.NB_TICK_MOLE_DELETION) {
 				gameGrid.releaseCell(moles[0].position.row, moles[0].position.col);
 				moles = moles.splice(1, moles.length);

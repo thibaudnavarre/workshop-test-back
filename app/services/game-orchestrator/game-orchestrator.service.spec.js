@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-unused-vars
 const GameGrid = require('./game-grid/game-grid');
+
 const mockReleaseCell = jest.fn();
 jest.mock('./game-grid/game-grid', () => {
 	return {
@@ -15,7 +17,8 @@ jest.mock('./game-grid/game-grid', () => {
 });
 
 const GameOrchestratorService = require('./game-orchestrator.service');
-const TICK_TIME = GameOrchestratorService.TICK_TIME;
+
+const { TICK_TIME } = GameOrchestratorService;
 
 describe('game-orchestrator.service', () => {
 	beforeEach(() => {
@@ -64,7 +67,7 @@ describe('game-orchestrator.service', () => {
 		it('should have 0 moles when the game start', () => {
 			GameOrchestratorService.gameStart();
 			const moles = GameOrchestratorService.getMoles();
-			expect(moles.length).toEqual(0);
+			expect(moles).toHaveLength(0);
 		});
 
 		it('should reset moles when starting a new game', () => {
@@ -73,14 +76,14 @@ describe('game-orchestrator.service', () => {
 			GameOrchestratorService.gameStop();
 			GameOrchestratorService.gameStart();
 			const moles = GameOrchestratorService.getMoles();
-			expect(moles.length).toEqual(0);
+			expect(moles).toHaveLength(0);
 		});
 
 		it('should create a mole after 2 secs after the game start', () => {
 			GameOrchestratorService.gameStart();
 			jest.advanceTimersByTime(TICK_TIME);
 			const moles = GameOrchestratorService.getMoles();
-			expect(moles.length).toEqual(1);
+			expect(moles).toHaveLength(1);
 		});
 
 		describe('mole generation', () => {
@@ -89,7 +92,7 @@ describe('game-orchestrator.service', () => {
 				GameOrchestratorService.gameStop();
 				jest.advanceTimersByTime(TICK_TIME);
 				const moles = GameOrchestratorService.getMoles();
-				expect(moles.length).toEqual(0);
+				expect(moles).toHaveLength(0);
 			});
 
 			it('should stop the mole generation (2 secs after starting) after stoping the game', () => {
@@ -98,14 +101,14 @@ describe('game-orchestrator.service', () => {
 				GameOrchestratorService.gameStop();
 				jest.advanceTimersByTime(TICK_TIME);
 				const moles = GameOrchestratorService.getMoles();
-				expect(moles.length).toEqual(1);
+				expect(moles).toHaveLength(1);
 			});
 
 			it('should have create 2 mole after 4 secs after the game start', () => {
 				GameOrchestratorService.gameStart();
 				jest.advanceTimersByTime(TICK_TIME * 2);
 				const moles = GameOrchestratorService.getMoles();
-				expect(moles.length).toEqual(2);
+				expect(moles).toHaveLength(2);
 			});
 		});
 
@@ -129,7 +132,7 @@ describe('game-orchestrator.service', () => {
 				const firstMole = GameOrchestratorService.getMoles()[0];
 				jest.advanceTimersByTime(TICK_TIME * 2);
 				const moles = GameOrchestratorService.getMoles();
-				expect(moles.length).toEqual(2);
+				expect(moles).toHaveLength(2);
 				expect(moles[0]).not.toEqual(firstMole);
 				expect(mockReleaseCell).toHaveBeenCalledWith(firstMole.position.row, firstMole.position.col);
 			});
@@ -139,7 +142,7 @@ describe('game-orchestrator.service', () => {
 				jest.advanceTimersByTime(TICK_TIME);
 				const firstMole = GameOrchestratorService.getMoles()[0];
 				GameOrchestratorService.whackAt(firstMole.position.row, firstMole.position.col);
-				expect(GameOrchestratorService.getMoles().length).toEqual(0);
+				expect(GameOrchestratorService.getMoles()).toHaveLength(0);
 				expect(mockReleaseCell).toHaveBeenCalledWith(firstMole.position.row, firstMole.position.col);
 			});
 

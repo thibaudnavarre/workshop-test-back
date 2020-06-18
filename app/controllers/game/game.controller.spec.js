@@ -20,12 +20,12 @@ describe('game.controller', () => {
 	describe('startNewGame', () => {
 		it('should call the service to start a new game', () => {
 			GameController.startNewGame(req, res);
-			expect(GameOrchestratorService.gameStart).toBeCalled();
+			expect(GameOrchestratorService.gameStart).toHaveBeenCalled();
 		});
 
 		it('should send an empty response when the game start succeed', () => {
 			GameController.startNewGame(req, res);
-			expect(res.send).toBeCalled();
+			expect(res.send).toHaveBeenCalled();
 		});
 
 		it('should return a bad request status code when the game start throw an error', () => {
@@ -33,19 +33,19 @@ describe('game.controller', () => {
 				throw new Error();
 			});
 			GameController.startNewGame(req, res);
-			expect(res.status).toBeCalledWith(401);
-			expect(res.send).toBeCalled();
+			expect(res.status).toHaveBeenCalledWith(401);
+			expect(res.send).toHaveBeenCalled();
 		});
 	});
 	describe('stopCurrentGame', () => {
 		it('should call the service to start a new game', () => {
 			GameController.stopCurrentGame(req, res);
-			expect(GameOrchestratorService.gameStop).toBeCalled();
+			expect(GameOrchestratorService.gameStop).toHaveBeenCalled();
 		});
 
 		it('should send an empty response', () => {
 			GameController.stopCurrentGame(req, res);
-			expect(res.send).toBeCalled();
+			expect(res.send).toHaveBeenCalled();
 		});
 	});
 });
