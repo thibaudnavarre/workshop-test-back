@@ -10,7 +10,7 @@ const GameController = {
 		res.send();
 	},
 
-	stopCurrenGame(req, res) {
+	stopCurrentGame(req, res) {
 		GameOrchestratorService.gameStop();
 		res.send();
 	},
