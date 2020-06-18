@@ -29,7 +29,7 @@ const GameOrchestratorService = {
 				gameGrid.releaseCell(moles[0].position.row, moles[0].position.col);
 				moles = moles.splice(1, moles.length);
 			}
-			if (gameTicks < this.NB_TICK_MOLE_DELETION) currentTimer = this.moleGenerationLoop();
+			if (gameTicks < this.NB_GAME_TICK) currentTimer = this.moleGenerationLoop();
 			else this.gameStop();
 		}, this.TICK_TIME);
 	},
