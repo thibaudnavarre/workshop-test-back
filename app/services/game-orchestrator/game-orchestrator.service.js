@@ -8,7 +8,7 @@ let gameTicks;
 
 const GameOrchestratorService = {
 	NB_GAME_TICK: 10,
-	TICK_TIME: 2000,
+	TICK_DURATION: 2000,
 	NB_TICK_MOLE_DELETION: 2,
 
 	gameStart() {
@@ -31,7 +31,7 @@ const GameOrchestratorService = {
 			}
 			if (gameTicks < this.NB_GAME_TICK) currentTimer = this.moleGenerationLoop();
 			else this.gameStop();
-		}, this.TICK_TIME);
+		}, this.TICK_DURATION);
 	},
 
 	gameStop() {
