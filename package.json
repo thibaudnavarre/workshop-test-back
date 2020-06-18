@@ -16,8 +16,8 @@
 		"test:unit": "jest ./app --testMatch **/*.spec.js --coverage --config ./jest.config.js",
 		"test:unit:watch": "jest ./app --testMatch **/*.spec.js --coverage --config ./jest.config.js --watch",
 		"test:integration": "jest --runInBand ./test/integration/*.spec.js --config ./test/integration/jest.config.js",
-		"linter": "eslint app test",
-		"linter:fix": "eslint app test --fix"
+		"linter": "eslint app test config.js app.js",
+		"linter:fix": "eslint app test config.js app.js --fix"
 	},
 	"author": "Robin COLLAS",
 	"license": "ISC",
