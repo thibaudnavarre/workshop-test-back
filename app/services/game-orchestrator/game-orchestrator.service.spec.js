@@ -18,7 +18,7 @@ jest.mock('./game-grid/game-grid', () => {
 
 const GameOrchestratorService = require('./game-orchestrator.service');
 
-const { TICK_TIME } = GameOrchestratorService;
+const { TICK_DURATION } = GameOrchestratorService;
 
 describe('game-orchestrator.service', () => {
 	beforeEach(() => {
@@ -51,7 +51,7 @@ describe('game-orchestrator.service', () => {
 
 		it('should automaticaly stop the game after 10 secs', () => {
 			GameOrchestratorService.gameStart();
-			jest.advanceTimersByTime(TICK_TIME * GameOrchestratorService.NB_GAME_TICK);
+			jest.advanceTimersByTime(TICK_DURATION * GameOrchestratorService.NB_GAME_TICK);
 			const running = GameOrchestratorService.isGameRunning();
 			expect(running).toEqual(false);
 		});
@@ -72,7 +72,7 @@ describe('game-orchestrator.service', () => {
 
 		it('should reset moles when starting a new game', () => {
 			GameOrchestratorService.gameStart();
-			jest.advanceTimersByTime(TICK_TIME);
+			jest.advanceTimersByTime(TICK_DURATION);
 			GameOrchestratorService.gameStop();
 			GameOrchestratorService.gameStart();
 			const moles = GameOrchestratorService.getMoles();
@@ -81,7 +81,7 @@ describe('game-orchestrator.service', () => {
 
 		it('should create a mole after 2 secs after the game start', () => {
 			GameOrchestratorService.gameStart();
-			jest.advanceTimersByTime(TICK_TIME);
+			jest.advanceTimersByTime(TICK_DURATION);
 			const moles = GameOrchestratorService.getMoles();
 			expect(moles).toHaveLength(1);
 		});
@@ -90,23 +90,23 @@ describe('game-orchestrator.service', () => {
 			it('should stop the mole generation (0 secs after starting) after stoping the game', () => {
 				GameOrchestratorService.gameStart();
 				GameOrchestratorService.gameStop();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				const moles = GameOrchestratorService.getMoles();
 				expect(moles).toHaveLength(0);
 			});
 
 			it('should stop the mole generation (2 secs after starting) after stoping the game', () => {
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				GameOrchestratorService.gameStop();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				const moles = GameOrchestratorService.getMoles();
 				expect(moles).toHaveLength(1);
 			});
 
 			it('should have create 2 mole after 4 secs after the game start', () => {
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_TIME * 2);
+				jest.advanceTimersByTime(TICK_DURATION * 2);
 				const moles = GameOrchestratorService.getMoles();
 				expect(moles).toHaveLength(2);
 			});
@@ -118,7 +118,7 @@ describe('game-orchestrator.service', () => {
 			});
 			it('should generate moles with a random position in the game grid', () => {
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				const moles = GameOrchestratorService.getMoles();
 				expect(moles[0].position.row).toBeDefined();
 				expect(moles[0].position.col).toBeDefined();
@@ -128,9 +128,9 @@ describe('game-orchestrator.service', () => {
 		describe('mole deletion', () => {
 			it('should remove the mole and release its cell after 4 secs', () => {
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				const firstMole = GameOrchestratorService.getMoles()[0];
-				jest.advanceTimersByTime(TICK_TIME * 2);
+				jest.advanceTimersByTime(TICK_DURATION * 2);
 				const moles = GameOrchestratorService.getMoles();
 				expect(moles).toHaveLength(2);
 				expect(moles[0]).not.toEqual(firstMole);
@@ -139,7 +139,7 @@ describe('game-orchestrator.service', () => {
 
 			it('should remove the mole when it is whacked', () => {
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_TIME);
+				jest.advanceTimersByTime(TICK_DURATION);
 				const firstMole = GameOrchestratorService.getMoles()[0];
 				GameOrchestratorService.whackAt(firstMole.position.row, firstMole.position.col);
 				expect(GameOrchestratorService.getMoles()).toHaveLength(0);

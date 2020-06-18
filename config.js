@@ -2,7 +2,7 @@ const env = process.env.NODE_ENV || 'dev';
 
 const dev = {
 	app: {
-		env: env,
+		env,
 		port: 3000,
 	},
 	auth: {
@@ -12,13 +12,13 @@ const dev = {
 	mongodb: {
 		host: 'localhost',
 		port: 27017,
-		db: 'sample_login',
+		db: 'tp_db',
 	},
 };
 
 const test = {
 	app: {
-		env: env,
+		env,
 		port: 3001,
 	},
 	auth: {
@@ -26,10 +26,10 @@ const test = {
 		expiresIn: 60,
 	},
 	mongodb: {
-		env: env,
+		env,
 		host: 'localhost',
-		port: 27018,
-		db: 'sample_login_test',
+		port: 27017,
+		db: 'tp_db_test',
 	},
 };
 
@@ -43,7 +43,7 @@ const prod = {
 	},
 	mongodb: {
 		host: process.env.DB_HOST,
-		port: parseInt(process.env.DB_PORT),
+		port: parseInt(process.env.DB_PORT, 10),
 		db: process.env.DB_NAME,
 	},
 };
