@@ -109,7 +109,7 @@ describe('game-orchestrator.service', () => {
 			});
 		});
 
-		describe('moles positionning', () => {
+		describe('moles positioning', () => {
 			beforeEach(() => {
 				jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 			});
