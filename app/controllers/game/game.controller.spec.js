@@ -48,4 +48,23 @@ describe('game.controller', () => {
 			expect(res.send).toHaveBeenCalled();
 		});
 	});
+
+	describe('getStatus', () => {
+		it('should send the array of moles and the game status to true', () => {
+			GameOrchestratorService.isGameRunning.mockReturnValue(true);
+			GameOrchestratorService.getMoles.mockReturnValue([{}]);
+			GameController.getStatus(req, res);
+			expect(res.json).toHaveBeenCalledWith({ status: true, moles: [{}] });
+		});
+		it('should send an empty array of moles and the game status to false', () => {
+			GameOrchestratorService.isGameRunning.mockReturnValue(false);
+			GameOrchestratorService.getMoles.mockReturnValue([]);
+			GameController.getStatus(req, res);
+			expect(res.json).toHaveBeenCalledWith({ status: false, moles: [] });
+		});
+	});
+
+	describe('whackAt', () => {
+		// TODO : Activité 2
+	});
 });

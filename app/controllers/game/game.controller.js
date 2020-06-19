@@ -14,6 +14,14 @@ const GameController = {
 		GameOrchestratorService.gameStop();
 		res.send();
 	},
+
+	getStatus(req, res) {
+		// TODO : Activité 1
+	},
+
+	whackAt(req, res) {
+		// TODO : Activité 2
+	},
 };
 
 module.exports = GameController;

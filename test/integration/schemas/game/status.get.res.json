@@ -1,0 +1,25 @@
+{
+	"type": "object",
+	"properties": {
+		"moles": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"position": {
+						"type": "object",
+						"properties": {
+							"row": "number",
+							"col": "number"
+						},
+						"required": ["row", "col"]
+					},
+					"tickGeneration": "number"
+				},
+				"required": ["position", "tickGeneration"]
+			}
+		},
+		"status": { "type": "boolean" }
+	},
+	"required": ["moles", "status"]
+}

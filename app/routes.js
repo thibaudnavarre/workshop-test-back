@@ -4,6 +4,8 @@ const GameController = require('./controllers/game/game.controller');
 const router = express.Router();
 
 router.get('/game/start', GameController.startNewGame);
-router.get('/game/stop', GameController.stopCurrenGame);
+router.get('/game/stop', GameController.stopCurrentGame);
+router.get('/game/status', GameController.getStatus);
+router.get('/game/whack-at', GameController.whackAt);
 
 module.exports = router;
