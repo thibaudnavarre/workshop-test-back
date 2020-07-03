@@ -1,7 +1,6 @@
 const { GameGrid } = require('./game-grid/game-grid');
 
 let isRunning = false;
-let moles = [];
 let currentTimer = null;
 let gameGrid;
 let gameTicks;
@@ -15,21 +14,20 @@ const GameOrchestratorService = {
 		if (isRunning) throw Error('game is already running');
 		isRunning = true;
 		gameGrid = new GameGrid();
-		moles = [];
 		gameTicks = 0;
 		currentTimer = this.moleGenerationLoop();
 	},
 
 	moleGenerationLoop() {
 		return setTimeout(() => {
-			const newMole = gameGrid.getRandomAvailableCell();
-			gameGrid.fillCell(newMole.row, newMole.col);
-			moles.push({ position: newMole, tickGeneration: gameTicks });
+			gameGrid.generateNewMole(gameTicks);
 			gameTicks += 1;
-			if (moles[0].tickGeneration < gameTicks - this.NB_TICK_MOLE_DELETION) {
-				gameGrid.releaseCell(moles[0].position.row, moles[0].position.col);
-				moles = moles.splice(1, moles.length);
-			}
+			const moles = gameGrid.getMoles();
+			moles.forEach((mole) => {
+				if (mole.tickGeneration < gameTicks - this.NB_TICK_MOLE_DELETION) {
+					gameGrid.deleteMole(mole.position.row, mole.position.col);
+				}
+			});
 			if (gameTicks < this.NB_GAME_TICK) currentTimer = this.moleGenerationLoop();
 			else this.gameStop();
 		}, this.TICK_DURATION);
@@ -45,13 +43,14 @@ const GameOrchestratorService = {
 	},
 
 	getMoles() {
-		return moles;
+		return gameGrid.getMoles();
 	},
 
 	whackAt(row, col) {
 		if (!isRunning) throw Error('you cannot whack when the game is not running');
-		moles = moles.filter((e) => e.position.row !== row && e.position.col !== col);
-		gameGrid.releaseCell(row, col);
+		if (gameGrid.getMoles().some((e) => e.position.row === row && e.position.col === col)) {
+			gameGrid.deleteMole(row, col);
+		}
 	},
 };
 

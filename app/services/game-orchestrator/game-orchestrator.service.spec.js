@@ -1,17 +1,18 @@
 // eslint-disable-next-line no-unused-vars
 const GameGrid = require('./game-grid/game-grid');
 
-const mockReleaseCell = jest.fn();
+const mockGameGridInstance = {
+	getRandomAvailableCell: () => {
+		return { row: 0, col: 0 };
+	},
+	getMoles: jest.fn(),
+	generateNewMole: jest.fn(),
+	deleteMole: jest.fn(),
+};
 jest.mock('./game-grid/game-grid', () => {
 	return {
 		GameGrid: jest.fn().mockImplementation(() => {
-			return {
-				getRandomAvailableCell: () => {
-					return { row: 0, col: 0 };
-				},
-				fillCell: () => {},
-				releaseCell: mockReleaseCell,
-			};
+			return mockGameGridInstance;
 		}),
 	};
 });
@@ -23,6 +24,7 @@ const { TICK_DURATION } = GameOrchestratorService;
 describe('game-orchestrator.service', () => {
 	beforeEach(() => {
 		jest.useFakeTimers();
+		mockGameGridInstance.getMoles.mockReturnValue([]);
 	});
 
 	afterEach(() => {
@@ -49,7 +51,7 @@ describe('game-orchestrator.service', () => {
 			expect(running).toEqual(false);
 		});
 
-		it('should automaticaly stop the game after 10 secs', () => {
+		it('should automaticaly stop the game after the maximum number of ticks', () => {
 			GameOrchestratorService.gameStart();
 			jest.advanceTimersByTime(TICK_DURATION * GameOrchestratorService.NB_GAME_TICK);
 			const running = GameOrchestratorService.isGameRunning();
@@ -63,87 +65,69 @@ describe('game-orchestrator.service', () => {
 		});
 	});
 
-	describe('mole management', () => {
-		it('should have 0 moles when the game start', () => {
-			GameOrchestratorService.gameStart();
-			const moles = GameOrchestratorService.getMoles();
-			expect(moles).toHaveLength(0);
+	describe('getting moles', () => {
+		it('should return moles of the game grid', () => {
+			mockGameGridInstance.getMoles.mockReturnValue([]);
+			expect(GameOrchestratorService.getMoles()).toEqual([]);
+		});
+	});
+
+	describe('mole generation', () => {
+		beforeEach(() => {
+			mockGameGridInstance.generateNewMole.mockClear();
+			mockGameGridInstance.deleteMole.mockClear();
 		});
 
-		it('should reset moles when starting a new game', () => {
+		it('should create a mole 1 tick after the game start', () => {
 			GameOrchestratorService.gameStart();
 			jest.advanceTimersByTime(TICK_DURATION);
-			GameOrchestratorService.gameStop();
-			GameOrchestratorService.gameStart();
-			const moles = GameOrchestratorService.getMoles();
-			expect(moles).toHaveLength(0);
+			expect(mockGameGridInstance.generateNewMole).toHaveBeenCalledTimes(1);
 		});
 
-		it('should create a mole after 2 secs after the game start', () => {
+		it('should have create 2 mole 2 ticks after the game started', () => {
 			GameOrchestratorService.gameStart();
-			jest.advanceTimersByTime(TICK_DURATION);
-			const moles = GameOrchestratorService.getMoles();
-			expect(moles).toHaveLength(1);
+			jest.advanceTimersByTime(TICK_DURATION * 2);
+			expect(mockGameGridInstance.generateNewMole).toHaveBeenCalledTimes(2);
 		});
 
-		describe('mole generation', () => {
-			it('should stop the mole generation (0 secs after starting) after stoping the game', () => {
+		describe('stop generation', () => {
+			it('should stop the mole generation after stoping the game (just after the game start)', () => {
 				GameOrchestratorService.gameStart();
 				GameOrchestratorService.gameStop();
 				jest.advanceTimersByTime(TICK_DURATION);
-				const moles = GameOrchestratorService.getMoles();
-				expect(moles).toHaveLength(0);
+				expect(mockGameGridInstance.generateNewMole).not.toHaveBeenCalled();
 			});
 
-			it('should stop the mole generation (2 secs after starting) after stoping the game', () => {
+			it('should stop the mole generation after stoping the game (2 tick after the game start) ', () => {
 				GameOrchestratorService.gameStart();
 				jest.advanceTimersByTime(TICK_DURATION);
 				GameOrchestratorService.gameStop();
 				jest.advanceTimersByTime(TICK_DURATION);
-				const moles = GameOrchestratorService.getMoles();
-				expect(moles).toHaveLength(1);
-			});
-
-			it('should have create 2 mole after 4 secs after the game start', () => {
-				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_DURATION * 2);
-				const moles = GameOrchestratorService.getMoles();
-				expect(moles).toHaveLength(2);
-			});
-		});
-
-		describe('moles positioning', () => {
-			beforeEach(() => {
-				jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
-			});
-			it('should generate moles with a random position in the game grid', () => {
-				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_DURATION);
-				const moles = GameOrchestratorService.getMoles();
-				expect(moles[0].position.row).toBeDefined();
-				expect(moles[0].position.col).toBeDefined();
+				expect(mockGameGridInstance.generateNewMole).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe('mole deletion', () => {
-			it('should remove the mole and release its cell after 4 secs', () => {
+			const moleWithFirstTick = { position: { row: 0, col: 0 }, tickGeneration: 0 };
+
+			it('should remove the mole with more than 2 ticks every tick', () => {
+				mockGameGridInstance.getMoles.mockReturnValue([moleWithFirstTick]);
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_DURATION);
-				const firstMole = GameOrchestratorService.getMoles()[0];
-				jest.advanceTimersByTime(TICK_DURATION * 2);
-				const moles = GameOrchestratorService.getMoles();
-				expect(moles).toHaveLength(2);
-				expect(moles[0]).not.toEqual(firstMole);
-				expect(mockReleaseCell).toHaveBeenCalledWith(firstMole.position.row, firstMole.position.col);
+				jest.advanceTimersByTime(TICK_DURATION * 3);
+				expect(mockGameGridInstance.deleteMole).toHaveBeenCalledWith(
+					moleWithFirstTick.position.row,
+					moleWithFirstTick.position.col,
+				);
 			});
 
 			it('should remove the mole when it is whacked', () => {
+				mockGameGridInstance.getMoles.mockReturnValue([moleWithFirstTick]);
 				GameOrchestratorService.gameStart();
-				jest.advanceTimersByTime(TICK_DURATION);
-				const firstMole = GameOrchestratorService.getMoles()[0];
-				GameOrchestratorService.whackAt(firstMole.position.row, firstMole.position.col);
-				expect(GameOrchestratorService.getMoles()).toHaveLength(0);
-				expect(mockReleaseCell).toHaveBeenCalledWith(firstMole.position.row, firstMole.position.col);
+				GameOrchestratorService.whackAt(moleWithFirstTick.position.row, moleWithFirstTick.position.col);
+				expect(mockGameGridInstance.deleteMole).toHaveBeenCalledWith(
+					moleWithFirstTick.position.row,
+					moleWithFirstTick.position.col,
+				);
 			});
 
 			it('should throw an error on whacking if is the game not running', () => {

@@ -37,8 +37,9 @@ describe('game.controller', () => {
 			expect(res.send).toHaveBeenCalled();
 		});
 	});
+
 	describe('stopCurrentGame', () => {
-		it('should call the service to start a new game', () => {
+		it('should call the service to stop the current game', () => {
 			GameController.stopCurrentGame(req, res);
 			expect(GameOrchestratorService.gameStop).toHaveBeenCalled();
 		});
@@ -65,6 +66,6 @@ describe('game.controller', () => {
 	});
 
 	describe('whackAt', () => {
-		// TODO : Activité 2
+		// TODO : Activité 1
 	});
 });

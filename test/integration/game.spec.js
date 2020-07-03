@@ -70,14 +70,14 @@ describe('default', () => {
 	});
 
 	// TODO : Activité 2
-	/*
+
 	describe('/game/whack-at', () => {
 		beforeEach(() => {
 			reqOptions.uri = `${BASE_URI}/whack-at`;
 			reqOptions.post = 'POST';
 		});
 
-		it('should return a 401 when the is not running', async () => {
+		it('should return a 401 when the game is not running', async () => {
 			const simpleMolePosition = { row: 0, col: 0 };
 			reqOptions.body = simpleMolePosition;
 			expect(validator.validate(simpleMolePosition, getWhackAtSchema).errors).toHaveLength(0);
@@ -91,6 +91,14 @@ describe('default', () => {
 				await request({
 					json: true,
 					uri: `${BASE_URI}/start`,
+					method: 'GET',
+				});
+			});
+
+			afterEach(async () => {
+				await request({
+					json: true,
+					uri: `${BASE_URI}/stop`,
 					method: 'GET',
 				});
 			});
@@ -121,5 +129,4 @@ describe('default', () => {
 			});
 		});
 	});
-	*/
 });
