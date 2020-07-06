@@ -66,6 +66,37 @@ describe('game.controller', () => {
 	});
 
 	describe('whackAt', () => {
-		// TODO : Activité 2
+		afterEach(() => {
+			GameService.whackAt = jest.fn();
+		});
+
+		it('should return a 401 when the request parameters are incorrect', () => {
+			GameController.whackAt(req, res);
+			expect(res.status).toHaveBeenCalledWith(401);
+		});
+
+		it('should return a 401 when the service is returning an error', () => {
+			req = { body: { row: -8, col: 10 } };
+			GameService.whackAt.mockImplementation(() => {
+				throw new Error();
+			});
+			GameController.whackAt(req, res);
+			expect(GameService.whackAt).toHaveBeenCalled();
+			expect(res.status).toHaveBeenCalledWith(401);
+		});
+
+		it('should return a 200 when the service has been called without any error', () => {
+			req = { body: { row: 2, col: 2 } };
+			GameController.whackAt(req, res);
+			expect(GameService.whackAt).toHaveBeenCalled();
+			expect(res.send).toHaveBeenCalled();
+		});
+
+		it('should accept the request when the position are (O;O)', () => {
+			req = { body: { row: 0, col: 0 } };
+			GameController.whackAt(req, res);
+			expect(GameService.whackAt).toHaveBeenCalled();
+			expect(res.send).toHaveBeenCalled();
+		});
 	});
 });

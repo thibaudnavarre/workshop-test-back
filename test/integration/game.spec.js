@@ -69,8 +69,6 @@ describe('default', () => {
 		});
 	});
 
-	// TODO : Activité 2
-	/*
 	describe('/game/whack-at', () => {
 		beforeEach(() => {
 			reqOptions.uri = `${BASE_URI}/whack-at`;
@@ -129,5 +127,4 @@ describe('default', () => {
 			});
 		});
 	});
-	*/
 });

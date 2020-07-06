@@ -23,7 +23,16 @@ const GameController = {
 	},
 
 	whackAt(req, res) {
-		// TODO : Activité 2
+		if (req.body.row !== undefined && req.body.col !== undefined) {
+			try {
+				GameService.whackAt(req.body.row, req.body.col);
+			} catch (e) {
+				res.status(401);
+			}
+		} else {
+			res.status(401);
+		}
+		res.send();
 	},
 };
 
