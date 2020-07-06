@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-const GameGrid = require('./game-grid/game-grid');
+const { GameGrid } = require('./game-grid/game-grid');
 
 const mockGameGridInstance = {
 	getRandomAvailableCell: () => {
@@ -32,6 +32,11 @@ describe('game-orchestrator.service', () => {
 		GameOrchestratorService.gameStop();
 	});
 
+	it('should return the game grid instance when start a new game', () => {
+		const instance = GameOrchestratorService.gameStart();
+		expect(instance).toEqual(mockGameGridInstance);
+	});
+
 	describe('running status', () => {
 		it('should have the isRunning game status to false by default', () => {
 			const running = GameOrchestratorService.isGameRunning();
@@ -62,13 +67,6 @@ describe('game-orchestrator.service', () => {
 			expect(() => {
 				GameOrchestratorService.gameStart();
 			}).toThrow();
-		});
-	});
-
-	describe('getting moles', () => {
-		it('should return moles of the game grid', () => {
-			mockGameGridInstance.getMoles.mockReturnValue([]);
-			expect(GameOrchestratorService.getMoles()).toEqual([]);
 		});
 	});
 
@@ -118,22 +116,6 @@ describe('game-orchestrator.service', () => {
 					moleWithFirstTick.position.row,
 					moleWithFirstTick.position.col,
 				);
-			});
-
-			it('should remove the mole when it is whacked', () => {
-				mockGameGridInstance.getMoles.mockReturnValue([moleWithFirstTick]);
-				GameOrchestratorService.gameStart();
-				GameOrchestratorService.whackAt(moleWithFirstTick.position.row, moleWithFirstTick.position.col);
-				expect(mockGameGridInstance.deleteMole).toHaveBeenCalledWith(
-					moleWithFirstTick.position.row,
-					moleWithFirstTick.position.col,
-				);
-			});
-
-			it('should throw an error on whacking if is the game not running', () => {
-				expect(() => {
-					GameOrchestratorService.whackAt(0, 0);
-				}).toThrow();
 			});
 		});
 	});

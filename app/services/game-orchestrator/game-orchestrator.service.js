@@ -16,6 +16,7 @@ const GameOrchestratorService = {
 		gameGrid = new GameGrid();
 		gameTicks = 0;
 		currentTimer = this.moleGenerationLoop();
+		return gameGrid;
 	},
 
 	moleGenerationLoop() {
@@ -40,17 +41,6 @@ const GameOrchestratorService = {
 
 	isGameRunning() {
 		return isRunning;
-	},
-
-	getMoles() {
-		return gameGrid.getMoles();
-	},
-
-	whackAt(row, col) {
-		if (!isRunning) throw Error('you cannot whack when the game is not running');
-		if (gameGrid.getMoles().some((e) => e.position.row === row && e.position.col === col)) {
-			gameGrid.deleteMole(row, col);
-		}
 	},
 };
 

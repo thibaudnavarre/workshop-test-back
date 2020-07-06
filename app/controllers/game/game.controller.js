@@ -1,9 +1,9 @@
-const GameOrchestratorService = require('../../services/game-orchestrator/game-orchestrator.service');
+const GameService = require('../../services/game/game.service');
 
 const GameController = {
 	startNewGame(req, res) {
 		try {
-			GameOrchestratorService.gameStart();
+			GameService.gameStart();
 		} catch (e) {
 			res.status(401);
 		}
@@ -11,7 +11,7 @@ const GameController = {
 	},
 
 	stopCurrentGame(req, res) {
-		GameOrchestratorService.gameStop();
+		GameService.gameStop();
 		res.send();
 	},
 

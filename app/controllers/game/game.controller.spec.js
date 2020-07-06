@@ -1,7 +1,7 @@
 const GameController = require('./game.controller');
-const GameOrchestratorService = require('../../services/game-orchestrator/game-orchestrator.service');
+const GameService = require('../../services/game/game.service');
 
-jest.mock('../../services/game-orchestrator/game-orchestrator.service');
+jest.mock('../../services/game/game.service');
 
 describe('game.controller', () => {
 	let req;
@@ -20,7 +20,7 @@ describe('game.controller', () => {
 	describe('startNewGame', () => {
 		it('should call the service to start a new game', () => {
 			GameController.startNewGame(req, res);
-			expect(GameOrchestratorService.gameStart).toHaveBeenCalled();
+			expect(GameService.gameStart).toHaveBeenCalled();
 		});
 
 		it('should send an empty response when the game start succeed', () => {
@@ -29,7 +29,7 @@ describe('game.controller', () => {
 		});
 
 		it('should return a bad request status code when the game start throw an error', () => {
-			GameOrchestratorService.gameStart.mockImplementation(() => {
+			GameService.gameStart.mockImplementation(() => {
 				throw new Error();
 			});
 			GameController.startNewGame(req, res);
@@ -41,7 +41,7 @@ describe('game.controller', () => {
 	describe('stopCurrentGame', () => {
 		it('should call the service to stop the current game', () => {
 			GameController.stopCurrentGame(req, res);
-			expect(GameOrchestratorService.gameStop).toHaveBeenCalled();
+			expect(GameService.gameStop).toHaveBeenCalled();
 		});
 
 		it('should send an empty response', () => {
@@ -52,20 +52,20 @@ describe('game.controller', () => {
 
 	describe('getStatus', () => {
 		it('should send the array of moles and the game status to true', () => {
-			GameOrchestratorService.isGameRunning.mockReturnValue(true);
-			GameOrchestratorService.getMoles.mockReturnValue([{}]);
+			GameService.isGameRunning.mockReturnValue(true);
+			GameService.getMoles.mockReturnValue([{}]);
 			GameController.getStatus(req, res);
 			expect(res.json).toHaveBeenCalledWith({ status: true, moles: [{}] });
 		});
 		it('should send an empty array of moles and the game status to false', () => {
-			GameOrchestratorService.isGameRunning.mockReturnValue(false);
-			GameOrchestratorService.getMoles.mockReturnValue([]);
+			GameService.isGameRunning.mockReturnValue(false);
+			GameService.getMoles.mockReturnValue([]);
 			GameController.getStatus(req, res);
 			expect(res.json).toHaveBeenCalledWith({ status: false, moles: [] });
 		});
 	});
 
 	describe('whackAt', () => {
-		// TODO : Activité 1
+		// TODO : Activité 2
 	});
 });

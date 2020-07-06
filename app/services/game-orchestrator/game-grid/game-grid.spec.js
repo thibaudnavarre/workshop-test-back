@@ -1,4 +1,4 @@
-const { GameGrid } = require('./game-grid');
+const { GameGrid, AvailabilityError, RangeError } = require('./game-grid');
 
 describe('game grid', () => {
 	let grid;
@@ -53,7 +53,7 @@ describe('game grid', () => {
 			stubIsPositionInTable.mockReturnValue(false);
 			expect(() => {
 				grid.isCellAvailable(10, 0);
-			}).toThrow();
+			}).toThrow(RangeError);
 		});
 	});
 
@@ -72,7 +72,7 @@ describe('game grid', () => {
 			grid.isCellAvailable = () => false;
 			expect(() => {
 				grid.addMole(0, 0, 1);
-			}).toThrow();
+			}).toThrow(AvailabilityError);
 		});
 	});
 
@@ -89,18 +89,12 @@ describe('game grid', () => {
 			expect(grid.getMoles()).not.toContain({ position: { col: 0, row: 0 }, tickGeneration: 1 });
 		});
 
-		it('should return an error if the array of moles is empty', () => {
-			expect(() => {
-				grid.deleteMole(1, 1);
-			}).toThrow('no mole to delete');
-		});
-
 		it('should throw an error when trying to release an available cell', () => {
 			grid.isCellAvailable = () => true;
 			grid.addMole(1, 1);
 			expect(() => {
 				grid.deleteMole(0, 0);
-			}).toThrowError('cell already available');
+			}).toThrowError(AvailabilityError, 'cell already available');
 		});
 	});
 
@@ -134,7 +128,7 @@ describe('game grid', () => {
 			}
 			expect(() => {
 				grid.getRandomAvailableCell();
-			}).toThrow();
+			}).toThrow(AvailabilityError);
 		});
 	});
 

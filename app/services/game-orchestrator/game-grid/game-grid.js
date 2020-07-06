@@ -1,3 +1,5 @@
+const { AvailabilityError, RangeError } = require('./game-errors');
+
 class GameGrid {
 	static NB_ROW = 4;
 
@@ -15,14 +17,14 @@ class GameGrid {
 	}
 
 	addMole(row, col, tick) {
-		if (!this.isCellAvailable(row, col)) throw Error('cell is not available');
+		if (!this.isCellAvailable(row, col)) throw new AvailabilityError('cell is not available');
 		const value = GameGrid.getCellValue(row, col);
 		this.moles.push({ position: { row, col }, tickGeneration: tick });
 		this.cellsAvailable.splice(this.cellsAvailable.indexOf(value), 1);
 	}
 
 	static getCellValue(row, col) {
-		if (!GameGrid.isPositionInTable(row, col)) throw Error('out of the game grid');
+		if (!GameGrid.isPositionInTable(row, col)) throw new RangeError('out of the game grid');
 		return row * GameGrid.NB_COL + col;
 	}
 
@@ -32,14 +34,13 @@ class GameGrid {
 	}
 
 	deleteMole(row, col) {
-		if (this.moles.length === 0) throw Error('no mole to delete');
-		if (this.isCellAvailable(row, col)) throw Error('cell already available');
+		if (this.isCellAvailable(row, col)) throw new AvailabilityError('cell already available');
 		this.cellsAvailable.push(GameGrid.getCellValue(row, col));
 		this.moles = this.moles.filter((element) => element.position.row !== row && element.position.col !== col);
 	}
 
 	getRandomAvailableCell() {
-		if (this.cellsAvailable.length === 0) throw Error('no cell available');
+		if (this.cellsAvailable.length === 0) throw new AvailabilityError('no cell available');
 		const random = Math.random() * 100;
 		const availableCellValue = this.cellsAvailable[random % this.cellsAvailable.length];
 		return GameGrid.getCellCoordinates(availableCellValue);
