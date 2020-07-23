@@ -85,18 +85,19 @@ describe('game.controller', () => {
 			expect(res.status).toHaveBeenCalledWith(401);
 		});
 
-		it('should return a 200 when the service has been called without any error', () => {
+		it('should return a 200 json with the score when the service has been called without any error', () => {
+			GameService.getScore.mockReturnValue(1);
 			req = { body: { row: 2, col: 2 } };
 			GameController.whackAt(req, res);
 			expect(GameService.whackAt).toHaveBeenCalled();
-			expect(res.send).toHaveBeenCalled();
+			expect(res.json).toHaveBeenCalledWith({ score: 1 });
 		});
 
 		it('should accept the request when the position are (O;O)', () => {
 			req = { body: { row: 0, col: 0 } };
 			GameController.whackAt(req, res);
 			expect(GameService.whackAt).toHaveBeenCalled();
-			expect(res.send).toHaveBeenCalled();
+			expect(res.json).toHaveBeenCalled();
 		});
 	});
 });

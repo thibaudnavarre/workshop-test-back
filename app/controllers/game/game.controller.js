@@ -26,13 +26,15 @@ const GameController = {
 		if (!Number.isNaN(parseInt(req.body.row, 10)) && !Number.isNan(parseInt(req.body.col, 10))) {
 			try {
 				GameService.whackAt(req.body.row, req.body.col);
+				res.json({ score: GameService.getScore() });
 			} catch (e) {
 				res.status(401);
+				res.send();
 			}
 		} else {
 			res.status(401);
+			res.send();
 		}
-		res.send();
 	},
 };
 

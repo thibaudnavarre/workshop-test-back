@@ -2,7 +2,8 @@ const request = require('request-promise-native');
 const { Validator } = require('jsonschema');
 const config = require('../../config');
 const getStatusSchema = require('./schemas/game/status.get.res.json');
-const getWhackAtSchema = require('./schemas/game/whack-at.post.req.json');
+const postReqWhackAtSchema = require('./schemas/game/whack-at.post.req.json');
+const postResWhackAtSchema = require('./schemas/game/whack-at.post.res.json');
 
 const BASE_URI = `http://localhost:${config.app.port}/game`;
 
@@ -79,7 +80,7 @@ describe('default', () => {
 		it('should return a 401 when the game is not running', async () => {
 			const simpleMolePosition = { row: 0, col: 0 };
 			reqOptions.body = simpleMolePosition;
-			expect(validator.validate(simpleMolePosition, getWhackAtSchema).errors).toHaveLength(0);
+			expect(validator.validate(simpleMolePosition, postReqWhackAtSchema).errors).toHaveLength(0);
 			await expect(request(reqOptions)).rejects.toMatchObject({
 				statusCode: 401,
 			});
@@ -102,18 +103,20 @@ describe('default', () => {
 				});
 			});
 
-			it('should return a 200 when the position is valid and in a good format and whenever a mole is whacked or not', async () => {
+			it('should return a 200 with the score when the position is valid whenever a mole is whacked or not', async () => {
 				const simpleMolePosition = { row: 0, col: 0 };
 				reqOptions.body = simpleMolePosition;
-				expect(validator.validate(simpleMolePosition, getWhackAtSchema).errors).toHaveLength(0);
+				expect(validator.validate(simpleMolePosition, postReqWhackAtSchema).errors).toHaveLength(0);
 				const res = await request(reqOptions);
 				expect(res.statusCode).toEqual(200);
+				expect(res.body).toBeTruthy();
+				expect(validator.validate(res.body, postResWhackAtSchema).errors).toHaveLength(0);
 			});
 
 			it('should return a 401 when the position is not valid but in a good format', async () => {
 				const simpleMolePosition = { row: 0, col: 12 };
 				reqOptions.body = simpleMolePosition;
-				expect(validator.validate(simpleMolePosition, getWhackAtSchema).errors).toHaveLength(0);
+				expect(validator.validate(simpleMolePosition, postReqWhackAtSchema).errors).toHaveLength(0);
 				await expect(request(reqOptions)).rejects.toMatchObject({
 					statusCode: 401,
 				});
