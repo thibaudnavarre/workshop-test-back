@@ -26,13 +26,15 @@ const GameController = {
 		if (req.body.row !== undefined && req.body.col !== undefined) {
 			try {
 				GameService.whackAt(req.body.row, req.body.col);
+				res.json({ score: GameService.getScore() });
 			} catch (e) {
 				res.status(401);
+				res.send();
 			}
 		} else {
 			res.status(401);
+			res.send();
 		}
-		res.send();
 	},
 };
 

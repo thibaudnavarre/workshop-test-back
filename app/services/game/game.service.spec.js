@@ -2,8 +2,10 @@ const GameOrchestratorService = require('../game-orchestrator/game-orchestrator.
 const GameService = require('./game.service');
 const { AvailabilityError } = require('../game-orchestrator/game-grid/game-errors');
 const NoGameRunningError = require('./NoGameRunningError');
+const ScoringCalculatorSercice = require('../scoring-calculator/scoring-calculator');
 
 jest.mock('../game-orchestrator/game-orchestrator.service');
+jest.mock('../scoring-calculator/scoring-calculator');
 
 describe('GameService', () => {
 	let mockGameGridInstance;
@@ -17,6 +19,11 @@ describe('GameService', () => {
 		it('should ask the orchestrator to start a new game', () => {
 			GameService.gameStart();
 			expect(GameOrchestratorService.gameStart).toHaveBeenCalled();
+		});
+
+		it('should reset the score', () => {
+			GameService.gameStart();
+			expect(ScoringCalculatorSercice.reset).toHaveBeenCalled();
 		});
 	});
 
@@ -116,6 +123,24 @@ describe('GameService', () => {
 			await expect(() => {
 				GameService.whackAt(0, 0);
 			}).not.toThrow(AvailabilityError);
+		});
+
+		it('should ask the scoring service to add point when a mole is whacked', () => {
+			GameService.gameStart();
+			GameService.whackAt(0, 0);
+			expect(ScoringCalculatorSercice.addWhackedPoint).toHaveBeenCalled();
+		});
+	});
+
+	describe('getScore', () => {
+		it('should return the score of 0 calculated by the scoring service', () => {
+			ScoringCalculatorSercice.getScore.mockReturnValue(0);
+			expect(GameService.getScore()).toEqual(0);
+		});
+
+		it('should return the score of 1 calculated by the scoring service', () => {
+			ScoringCalculatorSercice.getScore.mockReturnValue(1);
+			expect(GameService.getScore()).toEqual(1);
 		});
 	});
 });
