@@ -16,7 +16,10 @@ const GameController = {
 	},
 
 	getStatus(req, res) {
-		// TODO : Activité 1
+		const isRunning = GameService.isGameRunning();
+		const moles = GameService.getMoles();
+
+		res.json({ moles, status: isRunning });
 	},
 
 	whackAt(req, res) {
