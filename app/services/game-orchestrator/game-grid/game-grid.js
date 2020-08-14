@@ -41,8 +41,8 @@ class GameGrid {
 
 	getRandomAvailableCell() {
 		if (this.cellsAvailable.length === 0) throw new AvailabilityError('no cell available');
-		const random = Math.random() * 100;
-		const availableCellValue = this.cellsAvailable[random % this.cellsAvailable.length];
+		const randomInt = Math.floor(Math.random() * 100);
+		const availableCellValue = this.cellsAvailable[randomInt % this.cellsAvailable.length];
 		return GameGrid.getCellCoordinates(availableCellValue);
 	}
 

@@ -100,7 +100,7 @@ describe('game grid', () => {
 
 	describe('get random available cell', () => {
 		it('should return the (0;0) cell when the random return 0 and (0;0) never used', () => {
-			jest.spyOn(global.Math, 'random').mockReturnValue(0);
+			jest.spyOn(global.Math, 'random').mockReturnValue(0.001);
 			const cell = grid.getRandomAvailableCell();
 			expect(cell).toEqual({ row: 0, col: 0 });
 		});
