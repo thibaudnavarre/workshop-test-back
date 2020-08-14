@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  db_tp_tdd_test:
+    container_name: 'db_tp_tdd_test'
+    image: mongo
+    ports:
+      - 27018:27017
+    environment:
+      MONGO_INITDB_DATABASE: db_tp_tdd
+
+  api_tp_back_test:
+    container_name: 'api_tp_tdd_test'
+    build: .
+    ports:
+      - 3001:3001
+    links:
+      - db_tp_tdd_test
+    volumes:
+      - .:/api_tp_tdd
+    environment:
+      NODE_ENV: test
+      DB_HOST: db_tp_tdd_test
+      DB_PORT: 27017
+      DB_NAME: db_tp_tdd
+      AUTH_SECRET: randomsecretpassword
