@@ -13,7 +13,7 @@ const GameService = {
 		GameOrchestratorService.gameStop();
 	},
 
-	whackAt(col, row) {
+	whackAt(row, col) {
 		if (!this.currentGameGridInstance || !GameOrchestratorService.isGameRunning()) throw new NoGameRunningError();
 		try {
 			this.currentGameGridInstance.deleteMole(row, col);
