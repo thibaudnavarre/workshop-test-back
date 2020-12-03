@@ -74,7 +74,7 @@ describe('default', () => {
 	describe('/game/whack-at', () => {
 		beforeEach(() => {
 			reqOptions.uri = `${BASE_URI}/whack-at`;
-			reqOptions.post = 'POST';
+			reqOptions.method = 'POST';
 		});
 
 		it('should return a 401 when the game is not running', async () => {
