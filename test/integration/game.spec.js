@@ -65,6 +65,7 @@ describe('default', () => {
 		it('should return a 200 and an object when requesting a game status', async () => {
 			const res = await request(reqOptions);
 			expect(res.statusCode).toEqual(200);
+			expect(res.Body).toBeTruthy();
 			expect(validator.validate(res.body, getStatusSchema).errors).toHaveLength(0);
 		});
 	});
