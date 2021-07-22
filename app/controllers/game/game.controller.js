@@ -23,7 +23,16 @@ const GameController = {
 	},
 
 	whackAt(req, res) {
-		// TODO : Activité 2
+		if (!Number.isNaN(parseInt(req.body.row, 10)) && !Number.isNan(parseInt(req.body.col, 10))) {
+			try {
+				GameService.whackAt(req.body.row, req.body.col);
+			} catch (e) {
+				res.status(401);
+			}
+		} else {
+			res.status(401);
+		}
+		res.send();
 	},
 };
 
