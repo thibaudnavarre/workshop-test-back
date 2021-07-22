@@ -20,14 +20,14 @@ describe('default', () => {
 	describe('/game/start', () => {
 		beforeEach(() => {
 			reqOptions.uri = `${BASE_URI}/start`;
-			reqOptions.method = 'GET';
+			reqOptions.method = 'POST';
 		});
 
 		afterEach(async () => {
 			await request({
 				json: true,
 				uri: `${BASE_URI}/stop`,
-				method: 'GET',
+				method: 'POST',
 			});
 		});
 
@@ -47,7 +47,7 @@ describe('default', () => {
 	describe('/game/stop', () => {
 		beforeEach(() => {
 			reqOptions.uri = `${BASE_URI}/stop`;
-			reqOptions.method = 'GET';
+			reqOptions.method = 'POST';
 		});
 
 		it('should return a 200 when requesting to stop the game', async () => {
