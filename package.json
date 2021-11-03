@@ -46,7 +46,7 @@
 		"jsonschema": "^1.4.0",
 		"prettier": "^2.3.2",
 		"request-promise-native": "^1.0.9",
-		"validator": "^13.6.0"
+		"validator": "^13.7.0"
 	},
 	"jestSonar": {
 		"reportPath": "reports",
